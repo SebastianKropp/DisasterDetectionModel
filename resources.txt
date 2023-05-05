@@ -1,1 +1,7 @@
-#resources 
+pandas
+matplotlib.pyplot
+numpy
+sklearn
+random
+torch
+math
