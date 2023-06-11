@@ -5,6 +5,4 @@ scikit-learn
 torch
 streamlit
 seaborn
-os
-beautifulsoup4
 requests
