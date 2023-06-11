@@ -4,7 +4,7 @@ import torch
 from torch import nn, optim
 import torch.nn.functional as F
 from torch.utils.data import TensorDataset
-
+import os
 from time import sleep
 import math as Math
 from requestsAPI import process_tweets, sentiment_detection, sarcasm_detection
@@ -52,7 +52,7 @@ input_layers = 3565
 col1, col2 = st.columns([0.1, 0.9])
 
 with col1:
-    st.image('../images/twitterLogo.png', width=100)
+    st.image(os.getcwd()+'/images/twitterLogo.png', width=100)
     
 with col2:
     st.header('Tweet Disaster Detection')
@@ -69,10 +69,10 @@ if button or st.session_state.get("submit"):
 
     if option == "BertTDD":
         model = AutoModelForSequenceClassification.from_pretrained('prajjwal1/bert-tiny', num_labels=2)
-        model.load_state_dict(torch.load("../saved_models/transModel.pt"))
+        model.load_state_dict(torch.load(os.getcwd()+"/saved_models/transModel.pt"))
     if option == "NetTDD":
         model = netmodel(input_layer=input_layers, num_hidden=10, node_per_hidden=input_layers, droppout=0.3)
-        model.load_state_dict(torch.load("../saved_models/netModel.pt"))
+        model.load_state_dict(torch.load(os.getcwd()+"/saved_models/netModel.pt"))
 
     st.session_state["submit"] = True
     # Output Columns
