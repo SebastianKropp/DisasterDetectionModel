@@ -2,6 +2,7 @@
 from torch import nn
 import torch.nn.functional as F
 from transformers import AutoModelForSequenceClassification
+import pandas as pd
 
 class BERTmodel(nn.Module):
     def __init__(self, model_name='bert-base-uncased', outputs=2):
@@ -14,6 +15,22 @@ class BERTmodel(nn.Module):
         x = self.bert(x)
         x = F.softmax(x, dim=0)
         return x
+    
+def preprocess(texts, tokenizer):
+  texts = texts.tolist() if isinstance(texts, pd.Series) else texts  # Convert to list if needed
+
+  encoded_inputs = tokenizer(
+    texts,
+    padding='longest',
+    truncation=True,
+    max_length=512,
+    return_tensors='pt',
+    add_special_tokens=True
+  )
+  input_ids = encoded_inputs['input_ids']
+  attention_masks = encoded_inputs['attention_mask']
+
+  return input_ids, attention_masks
 
 class netmodel(nn.Module):
   def __init__(self, input_layer=1, num_hidden=1, node_per_hidden=32, droppout=0., LSTM_layers=0, outputs=2):

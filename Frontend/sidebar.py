@@ -7,7 +7,7 @@ def sidebar():
         st.markdown(
             "## How to use\n"
             "1. Enter a prompt (ideally from Twitter)\n"  
-            "2. Optionally enter location\n"
+            "2. Choose a Model\n"
             "3. Click submit!\n"
         )
         st.markdown("---")
