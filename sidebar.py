@@ -6,7 +6,7 @@ def sidebar():
     with st.sidebar:
         st.markdown(
             "## How to use\n"
-            "1. Enter a prompt (ideally from Twitter)\n"  # noqa: E501
+            "1. Enter a prompt (ideally from Twitter)\n"  
             "2. Optionally enter location\n"
             "3. Click submit!\n"
         )

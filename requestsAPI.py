@@ -37,9 +37,13 @@ def process_tweets(sentiment_result, sarcasm_result):
     row = {}
 
     # Add the sentiment and sarcasm probabilities to the row
-    row['negative'] = sentiment_result[0][0]['score']
-    row['neutral'] = sentiment_result[0][1]['score']
-    row['positive'] = sentiment_result[0][2]['score']
-    row['sarcastic'] = sarcasm_result[0][0]['score']
-    row['not_sarcastic'] = sarcasm_result[0][1]['score']
+    print (sentiment_result, sarcasm_result)
+    try:
+        row['negative'] = sentiment_result[0][0]['score']
+        row['neutral'] = sentiment_result[0][1]['score']
+        row['positive'] = sentiment_result[0][2]['score']
+        row['sarcastic'] = sarcasm_result[0][0]['score']
+        row['not_sarcastic'] = sarcasm_result[0][1]['score']
+    except:
+        return False
     return row

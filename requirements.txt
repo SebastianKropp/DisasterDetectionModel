@@ -6,3 +6,4 @@ torch
 streamlit
 seaborn
 requests
+torchvision
