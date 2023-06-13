@@ -7,13 +7,12 @@ def sidebar():
         st.markdown(
             "## How to use\n"
             "1. Enter a prompt (ideally from Twitter)\n"  
-            "2. Choose a Model\n"
-            "3. Click submit!\n"
+            "2. Click submit!\n"
         )
         st.markdown("---")
         st.markdown("# About")
         st.markdown(
-            "BertTDD will help you to find whether the tweet is a disaster or not. Unfortunately because of recent changes with Twitter's API, we are unable to provide a full demo based on twitter links. "
+            "BertTDD will help you to find whether the tweet is a disaster or not. Unfortunately because of recent changes with Twitter's API, we are unable to provide a full demo based on twitter links, and our additional model NetTDD. "
         )
         st.markdown(
             "This tool is a work in progress. "

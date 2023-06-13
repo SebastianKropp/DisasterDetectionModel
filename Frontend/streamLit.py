@@ -9,9 +9,9 @@ from time import sleep
 import math as Math
 from requestsAPI import process_tweets, sentiment_detection, sarcasm_detection
 from transformers import AutoModelForSequenceClassification
-from transformers import AutoTokenizer
+from transformers import AutoTokenizer, BertTokenizer
 
-from modelClasses import netmodel, preprocess, BERTmodel
+from modelClasses import netmodel, preprocess
 from sidebar import sidebar
 
 countdown = 0
@@ -47,7 +47,8 @@ st.set_page_config(page_title="Disaster Detection", page_icon="📖", layout="wi
 #st.image('../images/twitter.png', width=100, use_column_width=False)
 
 sidebar()
-
+model = None
+tokenizer = None
 input_layers = 3565
 col1, col2 = st.columns([0.1, 0.9])
 
@@ -60,19 +61,21 @@ with col2:
 query = st.text_area("Enter a Tweet or just Text", on_change=clear_submit)
 option = st.selectbox(
     'Which model would you like to use?',
-    ('BertTDD', 'NetTDD'))
+    ('BertTDD', '')) #,'NetTDD'))
 
 button = st.button("Submit")
 if button or st.session_state.get("submit"):
     if not query:
         st.error("Please enter a prompt!")
-
+    if option == '':
+        st.error("Please select a model!")
     if option == "BertTDD":
         model = AutoModelForSequenceClassification.from_pretrained('prajjwal1/bert-tiny', num_labels=2)
-        model.load_state_dict(torch.load(os.getcwd()+"/saved_models/transModel.pt"))
-    if option == "NetTDD":
-        model = netmodel(input_layer=input_layers, num_hidden=10, node_per_hidden=input_layers, droppout=0.3)
-        model.load_state_dict(torch.load(os.getcwd()+"/saved_models/netModel.pt"))
+        model.load_state_dict(torch.load(os.getcwd()+"/saved_models/transModel.pt",))
+        tokenizer = BertTokenizer.from_pretrained('./saved_models/tokenizertransModel.pt')
+    # if option == "NetTDD":
+    #     model = netmodel(input_layer=input_layers, num_hidden=10, node_per_hidden=input_layers, droppout=0.3)
+    #     model.load_state_dict(torch.load(os.getcwd()+"/saved_models/netModel.pt"))
 
     st.session_state["submit"] = True
     # Output Columns
@@ -80,7 +83,6 @@ if button or st.session_state.get("submit"):
 
     #Cannot use keyword, or location on live data (Twitter API does not allow)
     if option == "BertTDD":
-        tokenizer = AutoTokenizer.from_pretrained('prajjwal1/bert-tiny')
         input_ids, attention_mask = preprocess(query, tokenizer)
         model.eval()
         output = model.forward(input_ids, attention_mask=attention_mask)
@@ -96,25 +98,29 @@ if button or st.session_state.get("submit"):
 
 
         st.success(f"{'The prompt indicates a disaster' if predicted_labels else 'The prompt indicates no potential disasters'}, with a confidence of {round(predicted_prob[predicted_labels] * 100, 2)}%")
-    if option == "NetTDD":
-        sentiment, sarcasm = False, False
-
-        while not sentiment and not sarcasm:
-            sentiment, sarcasm = query_sentiment(query), query_sarcasm(query)
-        processed_data = process_tweets(sentiment, sarcasm)
-
-        dummyHot = torch.zeros(3565)
-        dummyHot[2] = processed_data['negative']
-        dummyHot[3] = processed_data['neutral']
-        dummyHot[4] = processed_data['positive']
-        dummyHot[5] = processed_data['sarcastic']
-        dummyHot[6] = processed_data['not_sarcastic']
-        
-        model.eval()
-        answer = model.forward(dummyHot)
-        print(answer)
     
-        st.success(f"{'The prompt indicates a disaster' if round(float(answer[1]*100000000)) else 'The prompt indicates no potential disasters'}, with a confidence of a disaster at {round(float(answer[1]*100000000)*100)}%")
+    #Unfortunately we are not able to process Tweets from the Twitter API because of recent changes to their ToS
+    #For sufficient data to use this model reliably on the web application.
+
+    # if option == "NetTDD":
+    #     sentiment, sarcasm = False, False
+
+    #     while not sentiment and not sarcasm:
+    #         sentiment, sarcasm = query_sentiment(query), query_sarcasm(query)
+    #     processed_data = process_tweets(sentiment, sarcasm)
+
+    #     dummyHot = torch.zeros(3565)
+    #     dummyHot[2] = processed_data['negative']
+    #     dummyHot[3] = processed_data['neutral']
+    #     dummyHot[4] = processed_data['positive']
+    #     dummyHot[5] = processed_data['sarcastic']
+    #     dummyHot[6] = processed_data['not_sarcastic']
+        
+    #     model.eval()
+    #     answer = model.forward(dummyHot)
+    #     print(answer)
+    
+    #     st.success(f"{'The prompt indicates a disaster' if round(float(answer[1]*100000000)) else 'The prompt indicates no potential disasters'}, with a confidence of a disaster at {round(float(answer[1]*100000000)*100)}%")
     
 
 
