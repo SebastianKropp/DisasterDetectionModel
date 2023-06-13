@@ -16,7 +16,7 @@ to discover whether the tweet is a disaster or not.
 Our initial model NetTDD fed a prompt into both a Sentiment Analysis model
 and a Sarcasm Detection model. The outputs of these models are then
 fed within NetTDD as well additional metadata such as keyword, and location to predict the final sentiment of the prompt.\n
-(* NetTDD cannot be used on live data as the Twitter API no longer viable *)
+(* NetTDD cannot be used on live data as the Twitter API is no longer viable. *)
 
 ## Is my data safe?
 Yes, your data is safe. BertTDD does not store your prompts or
